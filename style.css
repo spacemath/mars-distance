@@ -27,15 +27,10 @@ body {
 	position: absolute;
 }
 
-#overlay {
-}
-
-#mars-image {
-	/*border: 2px solid yellow;*/
-}
-
-#space {
-	background: green;
+.grid-line {
+    fill: none;
+    stroke: #555;
+    stroke-width: 1;
 }
 
 .circle {
@@ -44,11 +39,4 @@ body {
     stroke-width: 2;
 	opacity: 0.9;
 	cursor: pointer;
-    /*shape-rendering: crispEdges;*/
-}
-
-.grid-line {
-    fill: none;
-    stroke: #555;
-    stroke-width: 1;
 }
