@@ -34,12 +34,33 @@
 		</div>
 		</div>
 		
+		<div class='highlight'>
+		<p>
+		Distance between lander ($L$) and impact site ($I$):
+		<p>
+		<p style='margin-left: 40px'>
+		$d = D \cos^{-1}(\sin(L_y)\sin(I_y) + \cos(L_y)\cos(I_y)\cos(I_x-L_x))$ = <span id='distance'></span>
+		</p>
+		where
+		<ul>
+		<li>$D$ = 3390 km
+		<li>$(L_x, L_y)$ = longitude/latitude of lander = (<span id='lander-long'></span>, <span id='lander-lat'></span>)
+		<li>$(I_x, I_y)$ = longitude/latitude of impact site = (<span id='impact-long'></span>, <span id='impact-lat'></span>)
+		</ul>
+		</div>
+		
 		</div>
 		
 		<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js'></script>
 		<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js'></script>
 		<script type='text/javascript' src='http://puzlet.org/puzlet/js/d3.min.js'></script>
 		<script type='text/javascript' src='main.js'></script>
+		
+		<script type='text/x-mathjax-config'>
+			window.MathJax.Hub.Config({tex2jax: {inlineMath: [["$", "$"], ["\\(", "\\)"]]}});
+		</script>
+		
+		<script type='text/javascript' src='http://cdn.mathjax.org/mathjax/2.4-latest/MathJax.js?config=default'></script>
 		
 	</body>
 

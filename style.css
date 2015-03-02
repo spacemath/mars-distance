@@ -18,6 +18,11 @@ body {
 	margin-bottom: 20px;
 }
 
+#outer {
+	position: relative;
+	height: 450px;
+}
+
 .overlay {
 	position: absolute;
 }
