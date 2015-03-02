@@ -1,0 +1,18 @@
+body {
+	font-family: Verdana, 'DejaVu Sans', sans-serif;
+	font-size: 12pt;
+	line-height: 150%;
+}
+
+.container {
+	width: 900px;
+	margin: 0 auto;
+}
+
+.highlight {
+	padding: 5px 25px 5px 25px;
+	background: #555;
+	color: yellow;
+	opacity: 0.7;
+	margin-bottom: 20px;
+}
