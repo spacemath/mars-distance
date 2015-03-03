@@ -11,7 +11,7 @@ setCoords = (Lx, Ly, Ix, Iy) ->
     $("#distance").text(Math.round(d) + " km")
 
 impact = $blab.impact -10.8, 36, (-> set())
-lander = $blab.image -129.6, 5.4, (-> set())
+lander = $blab.lander -129.6, 5.4, (-> set())
 
 set = -> setCoords(lander.x, lander.y, impact.x, impact.y)
 set()

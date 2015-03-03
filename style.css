@@ -42,6 +42,26 @@ body {
 	cursor: move;
 }
 
+.circle-image circle {
+    fill: #ccc;
+    stroke: black;
+    stroke-width: 2;
+	opacity: 0.7;
+	cursor: move;
+}
+
+.circle-image text {
+	fill: black;
+	background: #ccc;
+	font: 12pt sans-serif;
+	font-weight: bold;
+	text-anchor: middle;
+}
+
+.circle-image image {
+	cursor: move;
+}
+
 .d3-image {
 	cursor: move;
 }

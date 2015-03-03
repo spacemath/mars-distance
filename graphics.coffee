@@ -99,7 +99,7 @@ class Circle extends d3Object
 		@transform x, y
 
 
-class Impact extends d3Object
+class ConcentricCircles extends d3Object
 
 	constructor: (@canvas, @x, @y, @r=10, @cb) ->
 		super @canvas, @x, @y, @cb
@@ -114,12 +114,12 @@ class Impact extends d3Object
 
 class Image extends d3Object
 	
-	constructor: (@canvas, @x, @y, @width, @height, @cb) ->
+	constructor: (@canvas, @image, @x, @y, @width, @height, @cb) ->
 		super @canvas, @x, @y, @cb
 
 	append: (x, y) ->
 		@obj = @container.append("svg:image")
-			.attr("xlink:href", "lander.png")
+			.attr("xlink:href", @image)
 			.attr("width", @width)
 			.attr("height", @height)
 			.attr("class", "d3-image")
@@ -129,8 +129,58 @@ class Image extends d3Object
 		@obj.attr "transform", "translate(#{x - @width / 2}, #{y - @height / 2})"
 
 
+class ImageCircle extends d3Object
+	
+	constructor: (@spec) ->
+		
+		{@canvas, @image, @label, @x, @y, @r, @cb} = @spec
+		
+		@width = 1.8*@r
+		@height = @width
+		super @canvas, @x, @y, @cb
+
+	append: (x, y) ->
+		@obj = @container.append('g')
+			.attr("width", @width)
+			.attr("height", @height)
+			.attr("class", "circle-image")
+		
+		@obj.append("circle").attr("r", @r)
+		
+		@image = @obj.append("svg:image")
+			.attr("xlink:href", @image)
+			.attr("transform", "translate(#{-@width / 2}, #{- @height / 2})")
+			.attr("width", @width)
+			.attr("height", @height)
+				
+		@obj.append("text")
+		    .attr("x", 0)
+		    .attr("y", @height)
+			.attr("dy", "-.3em")
+		    .text(@label)
+		
+		@transform x, y
+
+
 mars = $ "#mars-image"
 canvas = new Canvas mars
-$blab.image = (x, y, cb) -> new Image(canvas, x, y, 80, 80, (-> cb()))
-$blab.circle = (x, y, cb) -> new Circle(canvas, x, y, 10, (-> cb()))
-$blab.impact = (x, y, cb) -> new Impact(canvas, x, y, 15, (-> cb()))
+
+$blab.lander = (x, y, cb) ->
+	new ImageCircle
+		canvas: canvas
+		image: "lander.png"
+		label: "Lander"
+		x: x
+		y: y
+		r: 25
+		cb: (-> cb())
+		
+$blab.impact = (x, y, cb) ->
+	new ImageCircle
+		canvas: canvas
+		image: "meteor.png"
+		label: "Impact"
+		x: x
+		y: y
+		r: 25
+		cb: (-> cb())
