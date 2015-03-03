@@ -119,7 +119,7 @@ class Image extends d3Object
 
 	append: (x, y) ->
 		@obj = @container.append("svg:image")
-			.attr("xlink:href", "insight.png")
+			.attr("xlink:href", "lander.png")
 			.attr("width", @width)
 			.attr("height", @height)
 			.attr("class", "d3-image")
@@ -131,6 +131,6 @@ class Image extends d3Object
 
 mars = $ "#mars-image"
 canvas = new Canvas mars
-$blab.image = (x, y, cb) -> new Image(canvas, x, y, 60, 60, (-> cb()))
+$blab.image = (x, y, cb) -> new Image(canvas, x, y, 80, 80, (-> cb()))
 $blab.circle = (x, y, cb) -> new Circle(canvas, x, y, 10, (-> cb()))
 $blab.impact = (x, y, cb) -> new Impact(canvas, x, y, 15, (-> cb()))
