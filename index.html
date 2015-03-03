@@ -28,10 +28,15 @@
 		</div>
 		
 		<div id='outer'>
-		<div class='overlay'>
+		<div class='overlay' style='z-index: 1'>
 		<img id='mars-image' src='map.png'>
 		</div>
-		<div class='overlay' id='overlay'>
+		<div class='overlay' style='z-index: 2'>
+			<div id="map-legend">
+			<span style='color:red'>Red=+3000 meters</span>, <span style='color:blue'>Blue=-4000 meters</span>
+			</div>
+		</div>
+		<div class='overlay' id='overlay' style='z-index: 3'>
 		</div>
 		</div>
 		
@@ -73,6 +78,15 @@
 		</div>
 		
 		<a href='//github.com/spacemath/mars-distance'>GitHub source</a>
+		
+		<p class="footnote">
+		This web page is adapted from <a href="http://spacemath.gsfc.nasa.gov/ILabs.html">Space Math @ NASA ILabs</a>.
+		</p>
+		
+		<p class="footnote">
+		Background image taken by Mars Reconnaissance Orbiter<br>
+		HiRISe camera on March 2010
+		</p>
 		
 		</div>
 		

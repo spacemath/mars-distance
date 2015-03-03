@@ -8,6 +8,7 @@ body {
 	width: 900px;
 	margin: 0 auto;
 	margin-top: 40px;
+	margin-bottom: 40px;
 }
 
 .highlight {
@@ -57,4 +58,15 @@ body {
 
 .hide {
     display: none;
+}
+
+.footnote {
+	font-size: 9pt;
+	line-height: 120%;
+}
+
+#map-legend {
+	font-size: 8pt;
+	margin-left: 600px;
+	margin-top: 400px;
 }
