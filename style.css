@@ -40,3 +40,21 @@ body {
 	opacity: 0.9;
 	cursor: pointer;
 }
+
+.left-col {
+	float: left;
+	width: 440px;
+}
+
+.right-col {
+	float: right;
+	width: 440px;
+}
+
+.clear {
+	clear: both;
+}
+
+.hide {
+    display: none;
+}
