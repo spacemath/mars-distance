@@ -88,48 +88,6 @@ class d3Object
 	transform: (x, y) -> @obj.attr "transform", "translate(#{x}, #{y})"
 
 
-class Circle extends d3Object
-	
-	constructor: (@canvas, @x, @y, @r=10, @cb) ->
-		super @canvas, @x, @y, @cb
-		
-	append: (x, y) ->
-		@obj = @container.append("circle")
-			.attr("r", @r)
-			.attr("class", "circle")
-		@pos x, y
-
-
-class ConcentricCircles extends d3Object
-
-	constructor: (@canvas, @x, @y, @r=10, @cb) ->
-		super @canvas, @x, @y, @cb
-		
-	append: (x, y) ->
-		@obj = @container.append('g')
-			.attr('width', 2*@r)
-			.attr('height', 2*@r)
-		@obj.append("circle").attr("r", r).attr("class", "circle") for r in [@r, 0.6*@r, 0.2*@r]
-		@pos x, y
-
-
-class Image extends d3Object
-	
-	constructor: (@canvas, @image, @x, @y, @width, @height, @cb) ->
-		super @canvas, @x, @y, @cb
-
-	append: (x, y) ->
-		@obj = @container.append("svg:image")
-			.attr("xlink:href", @image)
-			.attr("width", @width)
-			.attr("height", @height)
-			.attr("class", "d3-image")
-		@pos x, y
-			
-	transform: (x, y) ->
-		@obj.attr "transform", "translate(#{x - @width / 2}, #{y - @height / 2})"
-
-
 class ImageCircle extends d3Object
 	
 	constructor: (@spec) ->
