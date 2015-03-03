@@ -39,11 +39,11 @@ body {
     stroke: black;
     stroke-width: 2;
 	opacity: 0.9;
-	cursor: crosshair;
+	cursor: move;
 }
 
 .d3-image {
-	cursor: crosshair;
+	cursor: move;
 }
 
 .left-col {
