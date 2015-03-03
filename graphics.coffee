@@ -65,28 +65,29 @@ class d3Object
 		@mx = @canvas.mx
 		@my = @canvas.my
 		
-		@append @mx(@x), @my(@y)
+		@append @x, @y
 		
 		@obj.call(
 			d3.behavior
 			.drag()
 			.on("drag", => 
 				@move(d3.event.x, d3.event.y)
-				@cb()
 			)
 		)
 		
 	append: (x, y) ->
 		#Override in subclass
-			
-	transform: (x, y) ->
-		@obj.attr "transform", "translate(#{x}, #{y})"
 		
-	move: (x, y) ->
-		@x = @canvas.invertX(x)
-		@y = @canvas.invertY(y)
-		@transform @mx(@x), @my(@y)
+	move: (x, y) -> @pos @canvas.invertX(x), @canvas.invertY(y)
 	
+	pos: (@x, @y) ->
+		@transform @mx(@x), @my(@y)
+		@cb()
+		#$.event.trigger "setPos", {obj: this}
+	
+	transform: (x, y) -> @obj.attr "transform", "translate(#{x}, #{y})"
+
+
 class Circle extends d3Object
 	
 	constructor: (@canvas, @x, @y, @r=10, @cb) ->
@@ -96,7 +97,7 @@ class Circle extends d3Object
 		@obj = @container.append("circle")
 			.attr("r", @r)
 			.attr("class", "circle")
-		@transform x, y
+		@pos x, y
 
 
 class ConcentricCircles extends d3Object
@@ -109,7 +110,7 @@ class ConcentricCircles extends d3Object
 			.attr('width', 2*@r)
 			.attr('height', 2*@r)
 		@obj.append("circle").attr("r", r).attr("class", "circle") for r in [@r, 0.6*@r, 0.2*@r]
-		@transform x, y
+		@pos x, y
 
 
 class Image extends d3Object
@@ -123,7 +124,7 @@ class Image extends d3Object
 			.attr("width", @width)
 			.attr("height", @height)
 			.attr("class", "d3-image")
-		@transform x, y
+		@pos x, y
 			
 	transform: (x, y) ->
 		@obj.attr "transform", "translate(#{x - @width / 2}, #{y - @height / 2})"
@@ -159,28 +160,46 @@ class ImageCircle extends d3Object
 			.attr("dy", "-.3em")
 		    .text(@label)
 		
-		@transform x, y
+		@pos x, y
 
 
 mars = $ "#mars-image"
 canvas = new Canvas mars
 
-$blab.lander = (x, y, cb) ->
-	new ImageCircle
-		canvas: canvas
-		image: "lander.png"
-		label: "Lander"
-		x: x
-		y: y
-		r: 25
-		cb: (-> cb())
-		
-$blab.impact = (x, y, cb) ->
-	new ImageCircle
+setCoords = ->
+	
+	Lx = $blab.lander?.x ? 0
+	Ly = $blab.lander?.y ? 0
+	Ix = $blab.impact?.x ? 0
+	Iy = $blab.impact?.y ? 0
+	
+	d = $blab.distance?(Lx, Ly, Ix, Iy) ? 0
+	
+	l = (s, x) -> $(s).html(Math.round(10*x) / 10 + "<sup>&deg;</sup>")
+	l("#lander-lat", Ly)
+	l("#lander-long", Lx)
+	l("#impact-lat", Iy)
+	l("#impact-long", Ix)
+
+	$("#distance").text(Math.round(d) + " km")
+
+$blab.impact = new ImageCircle
 		canvas: canvas
 		image: "meteor.png"
 		label: "Impact"
-		x: x
-		y: y
+		x: -129.6
+		y: 5.4
 		r: 25
-		cb: (-> cb())
+		cb: (-> setCoords())
+
+$blab.lander = new ImageCircle
+		canvas: canvas
+		image: "lander.png"
+		label: "Lander"
+		x: -10.8
+		y: 36
+		r: 25
+		cb: (-> setCoords())
+
+#$(document).on "setPos", (evt, data) ->
+	#setCoords()

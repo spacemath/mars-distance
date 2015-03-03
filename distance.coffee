@@ -15,8 +15,5 @@ distance = (x1, y1, x2, y2) ->
     D * acos( sin(y1)*sin(y2) + 
         cos(y1)*cos(y2)*cos(x1-x2) )
 
-# Change the coordinates then press shift-enter.
-distance -129.6, 5.4, -10.8, 36
-
 # Export distance function.
 $blab.distance = distance

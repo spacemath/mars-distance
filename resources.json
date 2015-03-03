@@ -2,5 +2,5 @@
 	"http://puzlet.org/puzlet/js/d3.min.js",
 	"graphics.coffee",
 	"distance.coffee",
-    "plot.coffee"
+    "setlocation.coffee"
 ]
