@@ -38,6 +38,15 @@ class Canvas
 		@gridLine(-180, y, 180, y) for y in [-90..90] by 10
 		@gridLine(x, -90, x, 90) for x in [-180..180] by 10
 		
+	invertX: (x) -> @limit @mx.invert(x), 180
+		
+	invertY: (y) ->  @limit @my.invert(y), 90
+		
+	limit: (z, m) ->
+		return m if z>m
+		return -m if z<-m
+		z
+		
 	gridLine: (x1, y1, x2, y2) ->
 		@surface.append("line")
 			.attr("x1", @mx(x1))
@@ -46,38 +55,81 @@ class Canvas
 			.attr("y2", @my(y2))
 			.attr("class", "grid-line")
 
-class Circle
+
+class d3Object
 	
-	constructor: (@canvas, @x, @y, @r=10, @cb) ->
+	constructor: (@canvas, @x, @y, @cb) ->
 		
 		@container = @canvas.surface
 		
 		@mx = @canvas.mx
 		@my = @canvas.my
 		
-		x = @mx(@x)
-		y = @my(@y)
+		@append @mx(@x), @my(@y)
 		
-		@obj = @container.append("circle")
-			.attr("transform", "translate(#{x}, #{y})")
-			.attr("r", @r)
-			.attr("class", "circle")
-				
 		@obj.call(
 			d3.behavior
 			.drag()
-			.on("drag", => @move(d3.event.x, d3.event.y, @cb))
+			.on("drag", => 
+				@move(d3.event.x, d3.event.y)
+				@cb()
+			)
 		)
+		
+	append: (x, y) ->
+		#Override in subclass
+			
+	transform: (x, y) ->
+		@obj.attr "transform", "translate(#{x}, #{y})"
+		
+	move: (x, y) ->
+		@x = @canvas.invertX(x)
+		@y = @canvas.invertY(y)
+		@transform @mx(@x), @my(@y)
 	
-	move: (x, y, cb) ->
-		xx = if x>0 then Math.max(0, Math.min(@canvas.width, x)) else 0
-		yy = if y>0 then Math.max(0, Math.min(@canvas.height, y)) else 0
-		@obj.attr "transform", "translate(#{xx}, #{yy})"
-		@x = @mx.invert(x)
-		@y = @my.invert(y)
-		cb()
+class Circle extends d3Object
+	
+	constructor: (@canvas, @x, @y, @r=10, @cb) ->
+		super @canvas, @x, @y, @cb
+		
+	append: (x, y) ->
+		@obj = @container.append("circle")
+			.attr("r", @r)
+			.attr("class", "circle")
+		@transform x, y
+
+
+class Impact extends d3Object
+
+	constructor: (@canvas, @x, @y, @r=10, @cb) ->
+		super @canvas, @x, @y, @cb
+		
+	append: (x, y) ->
+		@obj = @container.append('g')
+			.attr('width', 2*@r)
+			.attr('height', 2*@r)
+		@obj.append("circle").attr("r", r).attr("class", "circle") for r in [@r, 0.6*@r, 0.2*@r]
+		@transform x, y
+
+
+class Image extends d3Object
+	
+	constructor: (@canvas, @x, @y, @width, @height, @cb) ->
+		super @canvas, @x, @y, @cb
+
+	append: (x, y) ->
+		@obj = @container.append("svg:image")
+			.attr("xlink:href", "insight.png")
+			.attr("width", @width)
+			.attr("height", @height)
+		@transform x, y
+			
+	transform: (x, y) ->
+		@obj.attr "transform", "translate(#{x - @width / 2}, #{y - @height / 2})"
+
 
 mars = $ "#mars-image"
 canvas = new Canvas mars
+$blab.image = (x, y, cb) -> new Image(canvas, x, y, 60, 60, (-> cb()))
 $blab.circle = (x, y, cb) -> new Circle(canvas, x, y, 10, (-> cb()))
-
+$blab.impact = (x, y, cb) -> new Impact(canvas, x, y, 15, (-> cb()))
