@@ -187,8 +187,8 @@ $blab.impact = new ImageCircle
 		canvas: canvas
 		image: "meteor.png"
 		label: "Impact"
-		x: -129.6
-		y: 5.4
+		x: -10.8
+		y: 36
 		r: 25
 		cb: (-> setCoords())
 
@@ -196,8 +196,8 @@ $blab.lander = new ImageCircle
 		canvas: canvas
 		image: "lander.png"
 		label: "Lander"
-		x: -10.8
-		y: 36
+		x: -129.6
+		y: 5.4
 		r: 25
 		cb: (-> setCoords())
 
