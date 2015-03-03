@@ -122,6 +122,7 @@ class Image extends d3Object
 			.attr("xlink:href", "insight.png")
 			.attr("width", @width)
 			.attr("height", @height)
+			.attr("class", "d3-image")
 		@transform x, y
 			
 	transform: (x, y) ->
