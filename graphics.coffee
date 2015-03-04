@@ -1,8 +1,3 @@
-###
-TODO:
-* Image size derived from image
-###
-
 $blab.noGitHubRibbon = true;
 
 codeWidget = ->
@@ -21,15 +16,22 @@ codeWidget()
     
 class Canvas
 	
+	mapSrc: "map.png"
 	xMax: 180
 	yMax: 90
 	gridStep: 10
 	mapMargin: 41
 	
-	constructor: ->
+	constructor: (@callback) ->
+		@mapImage = new Image
+		@mapImage.src = @mapSrc
+		@mapImage.onload = =>
+			@width = @mapImage.width
+			@height = @mapImage.height
+			@create()
+			@callback this
 		
-		@width = $("#container").width()
-		@height = 435
+	create: ->
 		
 		@overlay = d3.select "#map"
 		@overlay.selectAll("svg").remove()
@@ -64,15 +66,16 @@ class Canvas
 	
 	map: ->
 		@surface.append("svg:image")
-			.attr("xlink:href", "map.png")
+			.attr("xlink:href", @mapSrc)
 			.attr("width", @width)
 			.attr("height", @height)
-			
-		$("#map-legend").append("<span style='color:red'>Red=+3000 meters</span>, <span style='color:blue'>Blue=-4000 meters</span>")
-		
+		@legend()
 		@gridLine(-@xMax, y, @xMax, y) for y in [-@yMax..@yMax] by @gridStep
 		@gridLine(x, -@yMax, x, @yMax) for x in [-@xMax..@xMax] by @gridStep
 	
+	legend: ->
+		$("#map-legend").append("<span style='color:red'>Red=+3000 meters</span>, <span style='color:blue'>Blue=-4000 meters</span>")
+		
 	gridLine: (x1, y1, x2, y2) ->
 		@surface.append("line")
 			.attr("x1", @mx(x1))
@@ -146,42 +149,44 @@ class ImageCircle extends d3Object
 		
 		@pos x, y
 
-
-canvas = new Canvas #mars
-
-setCoords = ->
+canvasObjects = (canvas) ->
 	
-	Lx = $blab.lander?.x ? 0
-	Ly = $blab.lander?.y ? 0
-	Ix = $blab.impact?.x ? 0
-	Iy = $blab.impact?.y ? 0
+	setCoords = ->
 	
-	l = (s, x) -> $(s).html(Math.round(10*x) / 10 + "<sup>&deg;</sup>")
-	l("#lander-lat", Ly)
-	l("#lander-long", Lx)
-	l("#impact-lat", Iy)
-	l("#impact-long", Ix)
+		Lx = $blab.lander?.x ? 0
+		Ly = $blab.lander?.y ? 0
+		Ix = $blab.impact?.x ? 0
+		Iy = $blab.impact?.y ? 0
 	
-	d = $blab.distance?(Lx, Ly, Ix, Iy) ? 0
-	$("#distance").text(Math.round(d) + " km")
+		l = (s, x) -> $(s).html(Math.round(10*x) / 10 + "<sup>&deg;</sup>")
+		l("#lander-lat", Ly)
+		l("#lander-long", Lx)
+		l("#impact-lat", Iy)
+		l("#impact-long", Ix)
+	
+		d = $blab.distance?(Lx, Ly, Ix, Iy) ? 0
+		$("#distance").text(Math.round(d) + " km")
+	
+	$blab.impact = new ImageCircle
+			canvas: canvas
+			image: "meteor.png"
+			label: "Impact"
+			x: -10.8
+			y: 36
+			r: 25
+			cb: (-> setCoords())
 
-$blab.impact = new ImageCircle
-		canvas: canvas
-		image: "meteor.png"
-		label: "Impact"
-		x: -10.8
-		y: 36
-		r: 25
-		cb: (-> setCoords())
+	$blab.lander = new ImageCircle
+			canvas: canvas
+			image: "lander.png"
+			label: "Lander"
+			x: -129.6
+			y: 5.4
+			r: 25
+			cb: (-> setCoords())
 
-$blab.lander = new ImageCircle
-		canvas: canvas
-		image: "lander.png"
-		label: "Lander"
-		x: -129.6
-		y: 5.4
-		r: 25
-		cb: (-> setCoords())
+
+new Canvas((canvas) -> canvasObjects(canvas))
 
 #$(document).on "setPos", (evt, data) ->
 	#setCoords()
