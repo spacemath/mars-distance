@@ -1,59 +1,78 @@
+###
+TODO:
+* Image size derived from image
+###
+
 $blab.noGitHubRibbon = true;
 
 codeWidget = ->
 	distanceCode = $ "#distance-code"
 	distanceCode.hide()
+	delay = 1000
 	$("#distance-toggle").click ->
 		if distanceCode.is(":visible")
-			distanceCode.hide 500
+			distanceCode.hide delay
 		else
 			distanceCode.show 0, ->
-				$("html, body").animate({scrollTop: $(document).height()}, 500)
+				$("html, body").animate({scrollTop: $(document).height()}, delay)
 		false
-		
 
 codeWidget()
     
 class Canvas
 	
-	constructor: (@image) ->
+	xMax: 180
+	yMax: 90
+	gridStep: 10
+	mapMargin: 41
+	
+	constructor: ->
 		
-		@width = @image.width()
-		@height = @image.height()
+		@width = $("#container").width()
+		@height = 435
+		
+		@overlay = d3.select "#map"
+		@overlay.selectAll("svg").remove()
+		@svg = @overlay.append("svg")
+			.attr('width', @width)
+			.attr('height', @height)
+			
+		@surface = @svg.append("g")
+			.attr("width", @width)
+			.attr("height", @height)
 		
 		@mx = d3.scale.linear()
-			.domain([221, -221])
+			.domain([@xMax + @mapMargin, -(@xMax + @mapMargin)])
 			.range([0, @width]) 
 		
 		@my = d3.scale.linear()
-			.domain([-131, 131])
+			.domain([-(@yMax + @mapMargin), @yMax + @mapMargin])
 			.range([@height, 0])
+			
+		@map()
 		
-		@overlay = d3.select "#overlay"
-		@overlay.selectAll("svg").remove()
-		@svg = @overlay.append "svg"
+		$("#map-preloader").remove()
 		
-		@svg.attr("id", "plot")
-			.attr('width', @width)
-			.attr('height', @height)
-		
-		@surface = @svg.append('g')
-			.attr('width', @width)
-			.attr('height', @height)
-			.attr('id', 'surface')
-		
-		@gridLine(-180, y, 180, y) for y in [-90..90] by 10
-		@gridLine(x, -90, x, 90) for x in [-180..180] by 10
-		
-	invertX: (x) -> @limit @mx.invert(x), 180
-		
-	invertY: (y) ->  @limit @my.invert(y), 90
+	invertX: (x) -> @limit @mx.invert(x), @xMax
+	
+	invertY: (y) ->  @limit @my.invert(y), @yMax
 		
 	limit: (z, m) ->
 		return m if z>m
 		return -m if z<-m
 		z
+	
+	map: ->
+		@surface.append("svg:image")
+			.attr("xlink:href", "map.png")
+			.attr("width", @width)
+			.attr("height", @height)
+			
+		$("#map-legend").append("<span style='color:red'>Red=+3000 meters</span>, <span style='color:blue'>Blue=-4000 meters</span>")
 		
+		@gridLine(-@xMax, y, @xMax, y) for y in [-@yMax..@yMax] by @gridStep
+		@gridLine(x, -@yMax, x, @yMax) for x in [-@xMax..@xMax] by @gridStep
+	
 	gridLine: (x1, y1, x2, y2) ->
 		@surface.append("line")
 			.attr("x1", @mx(x1))
@@ -128,8 +147,7 @@ class ImageCircle extends d3Object
 		@pos x, y
 
 
-mars = $ "#mars-image"
-canvas = new Canvas mars
+canvas = new Canvas #mars
 
 setCoords = ->
 	
@@ -138,14 +156,13 @@ setCoords = ->
 	Ix = $blab.impact?.x ? 0
 	Iy = $blab.impact?.y ? 0
 	
-	d = $blab.distance?(Lx, Ly, Ix, Iy) ? 0
-	
 	l = (s, x) -> $(s).html(Math.round(10*x) / 10 + "<sup>&deg;</sup>")
 	l("#lander-lat", Ly)
 	l("#lander-long", Lx)
 	l("#impact-lat", Iy)
 	l("#impact-long", Ix)
-
+	
+	d = $blab.distance?(Lx, Ly, Ix, Iy) ? 0
 	$("#distance").text(Math.round(d) + " km")
 
 $blab.impact = new ImageCircle

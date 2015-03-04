@@ -9,7 +9,7 @@
 	
 	<body background='background.jpg'>
 		
-		<div id='container' class='container'>
+		<div id='container'>
 		
 		<div class='highlight'>
 		<h1>The Distance between Two Points on Mars</h1>
@@ -27,17 +27,10 @@
 		
 		</div>
 		
-		<div id='outer'>
-		<div class='overlay' style='z-index: 1'>
-		<img id='mars-image' src='map.png'>
-		</div>
-		<div class='overlay' style='z-index: 2'>
-			<div id="map-legend">
-			<span style='color:red'>Red=+3000 meters</span>, <span style='color:blue'>Blue=-4000 meters</span>
-			</div>
-		</div>
-		<div class='overlay' id='overlay' style='z-index: 3'>
-		</div>
+		<div id='overlay-outer'>
+			<div id='map-preloader' class='overlay preloader'></div>
+			<div class='overlay' id='map'></div>
+			<div class='overlay' id="map-legend"></div>
 		</div>
 		
 		<div class='highlight'>
@@ -74,9 +67,6 @@
 	    <div class="clear"></div>
 		</div>
 		
-		<div class="hide">
-		</div>
-		
 		<a href='//github.com/spacemath/mars-distance'>GitHub source</a>
 		
 		<p class="footnote">
@@ -88,7 +78,7 @@
 		HiRISe camera on March 2010
 		</p>
 		
-		</div>
+		</div> <!--container-->
 		
 		<script>blabBasic = true;</script>
 		<!--script src="../puzlet/puzlet/js/puzlet.js"></script-->
