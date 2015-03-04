@@ -1,6 +1,8 @@
 [
 	"http://puzlet.org/puzlet/js/d3.min.js",
+	"code-widget.coffee",
 	"graphics.coffee",
 	"distance.coffee",
-    "setlocation.coffee"
+    "setlocation.coffee",
+    "main.coffee"
 ]

@@ -1,19 +1,3 @@
-$blab.noGitHubRibbon = true;
-
-codeWidget = ->
-	distanceCode = $ "#distance-code"
-	distanceCode.hide()
-	delay = 1000
-	$("#distance-toggle").click ->
-		if distanceCode.is(":visible")
-			distanceCode.hide delay
-		else
-			distanceCode.show 0, ->
-				$("html, body").animate({scrollTop: $(document).height()}, delay)
-		false
-
-codeWidget()
-    
 class Canvas
 	
 	mapSrc: "../resources/images/mars-map.png"
@@ -152,36 +136,28 @@ class ImageCircle extends d3Object
 		
 		@pos x, y
 
-canvasObjects = (canvas) ->
-	
-	setCoords = ->
-	
-		Lx = $blab.lander?.x ? 0
-		Ly = $blab.lander?.y ? 0
-		Ix = $blab.impact?.x ? 0
-		Iy = $blab.impact?.y ? 0
-	
-		l = (s, x) -> $(s).html(Math.round(10*x)/10 + "<sup>&deg;</sup>")
-		l("#lander-lat", Ly)
-		l("#lander-long", Lx)
-		l("#impact-lat", Iy)
-		l("#impact-long", Ix)
-	
-		d = $blab.distance?(Lx, Ly, Ix, Iy) ? 0
-		$("#distance").text(Math.round(d) + " km")
-	
-	$blab.impact = new ImageCircle
-			canvas: canvas
+
+class LanderAndImpact
+
+	constructor: (@canvas, @setCoordsCallback) ->
+		
+		# Default objects before construction.
+		# This is needed so that setCoords can be called before both objects constructed.
+		@lander = x: 0, y: 0
+		@impact = x: 0, y: 0
+		
+		@impact = new ImageCircle
+			canvas: @canvas
 			image: "../resources/images/meteor.png"
 			label: "Impact"
 			x: -10.8
 			y: 36
 			r: 25
 			draggable: true
-			cb: (-> setCoords())
+			cb: (=> @setCoords())
 
-	$blab.lander = new ImageCircle
-			canvas: canvas
+		@lander = new ImageCircle
+			canvas: @canvas
 			image: "../resources/images/lander.png"
 			label: "Lander"
 			# +3North and -135 East. 
@@ -189,10 +165,30 @@ canvasObjects = (canvas) ->
 			y: 3
 			r: 25
 			draggable: false
-			cb: (-> setCoords())
+			cb: (=> @setCoords())
 
+	setCoords: ->
+		
+		Lx = @lander.x
+		Ly = @lander.y
+		Ix = @impact.x
+		Iy = @impact.y
 
-new Canvas((canvas) -> canvasObjects(canvas))
+		l = (s, x) -> $(s).html(Math.round(10*x)/10 + "<sup>&deg;</sup>")
+		l("#lander-lat", Ly)
+		l("#lander-long", Lx)
+		l("#impact-lat", Iy)
+		l("#impact-long", Ix)
+		
+		# TODO: d should be prop?  Coords doc interface should be separate obj/class?
+		@distance = $blab.distance?(Lx, Ly, Ix, Iy) ? 0
+		$("#distance").text(Math.round(@distance) + " km")
+		
+		@setCoordsCallback?(this)
 
-#$(document).on "setPos", (evt, data) ->
-	#setCoords()
+# Exports
+$blab.Canvas = Canvas
+$blab.LanderAndImpact = LanderAndImpact
+
+# Event handling - not used.
+$(document).on "setPos", (evt, data) ->
