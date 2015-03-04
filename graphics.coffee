@@ -137,7 +137,7 @@ class ImageCircle extends d3Object
 		
 		@image = @obj.append("svg:image")
 			.attr("xlink:href", @image)
-			.attr("transform", "translate(#{-@width / 2}, #{- @height / 2})")
+			.attr("transform", "translate(#{-@width/2}, #{-@height/2})")
 			.attr("width", @width)
 			.attr("height", @height)
 				
@@ -158,7 +158,7 @@ canvasObjects = (canvas) ->
 		Ix = $blab.impact?.x ? 0
 		Iy = $blab.impact?.y ? 0
 	
-		l = (s, x) -> $(s).html(Math.round(10*x) / 10 + "<sup>&deg;</sup>")
+		l = (s, x) -> $(s).html(Math.round(10*x)/10 + "<sup>&deg;</sup>")
 		l("#lander-lat", Ly)
 		l("#lander-long", Lx)
 		l("#impact-lat", Iy)

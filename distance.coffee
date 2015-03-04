@@ -1,5 +1,5 @@
 # Degrees to radians.
-deg2rad = (a) -> a*pi / 180
+deg2rad = (a) -> a*pi/180
 
 # Define sin/cos to use degrees.
 sinRad = sin
