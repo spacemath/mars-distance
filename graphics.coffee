@@ -1,11 +1,18 @@
 $blab.noGitHubRibbon = true;
 
-distanceCode = $ "#distance-code"
-distanceCode.hide()
-$("#distance-toggle").click ->
-    distanceCode.toggle()
-    $("html, body").animate({scrollTop: $(document).height()}, "slow")
-    false
+codeWidget = ->
+	distanceCode = $ "#distance-code"
+	distanceCode.hide()
+	$("#distance-toggle").click ->
+		if distanceCode.is(":visible")
+			distanceCode.hide 500
+		else
+			distanceCode.show 0, ->
+				$("html, body").animate({scrollTop: $(document).height()}, 500)
+		false
+		
+
+codeWidget()
     
 class Canvas
 	

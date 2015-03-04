@@ -12,4 +12,3 @@ $blab.distance(
     lander.x, lander.y
     impact.x, impact.y
 )
-
