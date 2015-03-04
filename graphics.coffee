@@ -16,7 +16,7 @@ codeWidget()
     
 class Canvas
 	
-	mapSrc: "map.png"
+	mapSrc: "../mars-distance/map.png"
 	xMax: 180
 	yMax: 90
 	gridStep: 10
@@ -172,7 +172,7 @@ canvasObjects = (canvas) ->
 	
 	$blab.impact = new ImageCircle
 			canvas: canvas
-			image: "meteor.png"
+			image: "../mars-distance/meteor.png"
 			label: "Impact"
 			x: -10.8
 			y: 36
@@ -182,7 +182,7 @@ canvasObjects = (canvas) ->
 
 	$blab.lander = new ImageCircle
 			canvas: canvas
-			image: "lander.png"
+			image: "../mars-distance/lander.png"
 			label: "Lander"
 			# +3North and -135 East. 
 			x: -135
