@@ -87,7 +87,7 @@ class Canvas
 
 class d3Object
 	
-	constructor: (@canvas, @x, @y, @cb) ->
+	constructor: (@canvas, @x, @y, @draggable, @cb) ->
 		
 		@container = @canvas.surface
 		
@@ -96,6 +96,12 @@ class d3Object
 		
 		@append @x, @y
 		
+		@setDraggable() if @draggable
+		
+	append: (x, y) ->
+		#Override in subclass
+	
+	setDraggable: ->
 		@obj.call(
 			d3.behavior
 			.drag()
@@ -103,10 +109,7 @@ class d3Object
 				@move(d3.event.x, d3.event.y)
 			)
 		)
-		
-	append: (x, y) ->
-		#Override in subclass
-		
+	
 	move: (x, y) -> @pos @canvas.invertX(x), @canvas.invertY(y)
 	
 	pos: (@x, @y) ->
@@ -121,17 +124,17 @@ class ImageCircle extends d3Object
 	
 	constructor: (@spec) ->
 		
-		{@canvas, @image, @label, @x, @y, @r, @cb} = @spec
+		{@canvas, @image, @label, @x, @y, @r, @draggable, @cb} = @spec
 		
 		@width = 1.8*@r
 		@height = @width
-		super @canvas, @x, @y, @cb
+		super @canvas, @x, @y, @draggable, @cb
 
 	append: (x, y) ->
 		@obj = @container.append('g')
 			.attr("width", @width)
 			.attr("height", @height)
-			.attr("class", "circle-image")
+			.attr("class", "circle-image"+(if @draggable then " draggable" else ""))
 		
 		@obj.append("circle").attr("r", @r)
 		
@@ -174,15 +177,18 @@ canvasObjects = (canvas) ->
 			x: -10.8
 			y: 36
 			r: 25
+			draggable: true
 			cb: (-> setCoords())
 
 	$blab.lander = new ImageCircle
 			canvas: canvas
 			image: "lander.png"
 			label: "Lander"
-			x: -129.6
-			y: 5.4
+			# +3North and -135 East. 
+			x: -135
+			y: 3
 			r: 25
+			draggable: false
 			cb: (-> setCoords())
 
 

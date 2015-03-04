@@ -77,7 +77,6 @@
     stroke: black;
     stroke-width: 2;
 	opacity: 0.7;
-	cursor: move;
 }
 
 .circle-image text {
@@ -88,6 +87,6 @@
 	text-anchor: middle;
 }
 
-.circle-image image {
+.draggable {
 	cursor: move;
 }
