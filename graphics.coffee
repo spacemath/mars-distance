@@ -16,7 +16,7 @@ codeWidget()
     
 class Canvas
 	
-	mapSrc: "../resources/images/map.png"
+	mapSrc: "../resources/images/mars-map.png"
 	xMax: 180
 	yMax: 90
 	gridStep: 10
