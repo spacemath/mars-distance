@@ -1,3 +1,16 @@
+/* Element styles */
+
+body { 
+    background-image: url(../resources/images/mars1.jpg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: 0px 0px; 
+}
+
+a {
+    color: white;
+}
+
 /* Main container */
 
 #container {
@@ -33,6 +46,10 @@
 	margin-left: 600px;
 	margin-top: 400px;
 	font-size: 8pt;
+}
+
+#distance-code {
+    margin-bottom: 20px;
 }
 
 .left-col {
