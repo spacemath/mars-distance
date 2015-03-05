@@ -8,7 +8,7 @@ body {
 }
 
 a {
-    color: white;
+    color: #ddd;
 }
 
 /* Main container */
@@ -28,9 +28,8 @@ a {
 .highlight {
 	margin-bottom: 20px;
 	padding: 5px 25px 5px 25px;
-	background: #555;
-	color: yellow;
-	opacity: 0.7;
+	background: rgba(80, 80, 80, 0.7);
+	color: #dd0;
 }
 
 #overlay-outer {
