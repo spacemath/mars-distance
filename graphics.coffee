@@ -146,16 +146,6 @@ class LanderAndImpact
 		@lander = x: 0, y: 0
 		@impact = x: 0, y: 0
 		
-		@impact = new ImageCircle
-			canvas: @canvas
-			image: "../resources/images/meteor.png"
-			label: "Impact"
-			x: -10.8
-			y: 36
-			r: 25
-			draggable: true
-			cb: (=> @setCoords())
-
 		@lander = new ImageCircle
 			canvas: @canvas
 			image: "../resources/images/lander.png"
@@ -165,6 +155,16 @@ class LanderAndImpact
 			y: 3
 			r: 25
 			draggable: false
+			cb: (=> @setCoords())
+			
+		@impact = new ImageCircle
+			canvas: @canvas
+			image: "../resources/images/meteor.png"
+			label: "Impact"
+			x: -10.8
+			y: 36
+			r: 25
+			draggable: true
 			cb: (=> @setCoords())
 
 	setCoords: ->
